@@ -123,8 +123,7 @@ class CamundaHelper(
 
     fun getUserTask(instance: ProcessInstanceEvent, activityId: String) =
         client.newUserTaskSearchRequest()
-            .filter { it.processInstanceKey(instance.processInstanceKey) }
-            .filter { it.elementId(activityId) }
+            .filter { it.processInstanceKey(instance.processInstanceKey).elementId(activityId) }
             .send()
             .join()
             .items()
