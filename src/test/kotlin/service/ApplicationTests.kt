@@ -1,13 +1,20 @@
 package service
 
+import io.camunda.client.CamundaClient
+import io.camunda.client.api.response.ProcessInstanceEvent
+import io.camunda.client.api.search.response.UserTask
+import io.camunda.process.test.api.CamundaAssert
+import io.camunda.process.test.api.CamundaSpringProcessTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
 import org.springframework.boot.test.web.server.LocalManagementPort
+import org.springframework.context.annotation.Import
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatus.FORBIDDEN
 import org.springframework.http.HttpStatus.OK
@@ -16,7 +23,9 @@ import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.client.RestTestClient
 
 @ActiveProfiles("test")
+@CamundaSpringProcessTest
 @AutoConfigureRestTestClient
+@Import(CamundaHelper::class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 class ApplicationTests(
     @Autowired val client: RestTestClient
@@ -61,5 +70,77 @@ class ApplicationTests(
                 .headers { if (username != null) it.setBasicAuth(username, username.reversed()) }
                 .exchange()
                 .expectStatus().isEqualTo(status)
+    }
+
+    @Nested
+    inner class WorkerSmokeTests(
+        @Autowired private val camunda: CamundaHelper,
+    ) {
+
+        @Test
+        fun `hello world example process can be completed`() {
+            with(camunda) {
+                addResources("models/hello-world.bpmn", "models/hello-world.form")
+
+                val instance = createInstance("process_learning_hello-world")
+
+                waitForUserTaskAndSubmit(instance, "activity_form-input", mapOf("name" to "Tester"))
+                waitForCompletion(instance)
+            }
+        }
+    }
+}
+
+class CamundaHelper(
+    private val client: CamundaClient,
+) {
+
+    fun addResources(vararg resources: String) {
+        if (resources.isEmpty()) return
+
+        client.newDeployResourceCommand()
+            .let { resources.map { resource -> it.addResourceFromClasspath(resource) }.last() }
+            .send()
+            .join()
+    }
+
+    fun createInstance(processId: String) =
+        client.newCreateInstanceCommand()
+            .bpmnProcessId(processId)
+            .latestVersion()
+            .send()
+            .join()
+
+    fun waitForUserTaskAndSubmit(
+        instance: ProcessInstanceEvent,
+        elementId: String,
+        variables: Map<String, Any> = emptyMap()
+    ) {
+        waitForElementToBecomeActive(instance, elementId)
+        val task = getUserTask(instance, elementId)
+        complete(task, variables)
+    }
+
+    fun getUserTask(instance: ProcessInstanceEvent, activityId: String) =
+        client.newUserTaskSearchRequest()
+            .filter { it.processInstanceKey(instance.processInstanceKey) }
+            .filter { it.elementId(activityId) }
+            .send()
+            .join()
+            .items()
+            .single()
+
+    fun complete(userTask: UserTask, variables: Map<String, Any> = emptyMap()) =
+        client.newCompleteUserTaskCommand(userTask.userTaskKey)
+            .variables(variables)
+            .send()
+            .join()
+
+    fun waitForElementToBecomeActive(instance: ProcessInstanceEvent, elementId: String) {
+        CamundaAssert.assertThat(instance).hasActiveElements(elementId)
+    }
+
+    fun waitForCompletion(instance: ProcessInstanceEvent) {
+        CamundaAssert.assertThat(instance).isCompleted()
     }
 }
