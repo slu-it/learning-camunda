@@ -1,0 +1,11 @@
+logbook:
+  format:
+    style: json
+
+management:
+  health:
+    camunda:
+      enabled: false
+
+server:
+  shutdown: immediate

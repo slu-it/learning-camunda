@@ -1,0 +1,62 @@
+logbook:
+  format:
+    style: http
+  minimum-status: 400
+  strategy: body-only-if-status-at-least
+  predicate:
+    exclude:
+      - path: /actuator/health/**
+
+logging:
+  level:
+    root: warn
+    service: info
+    org.zalando.logbook: trace
+
+management:
+  endpoint:
+    info:
+      access: read_only
+    health:
+      access: read_only
+    metrics:
+      access: read_only
+  endpoints:
+    web:
+      exposure:
+        include:
+          - info
+          - health
+          - metrics
+    access:
+      default: none
+      max-permitted: read_only
+  server:
+    port: 9091
+
+server:
+  port: 8081
+
+spring:
+  application:
+    name: spring-boot-service
+  jackson:
+    default-property-inclusion: non_null
+
+---
+
+camunda:
+  client:
+    mode: self-managed
+    grpc-address: http://127.0.0.1:26500
+    rest-address: http://127.0.0.1:8080
+
+---
+spring.config.activate.on-profile: json-logging
+
+logbook:
+  format:
+    style: json
+
+logging:
+  config: classpath:logback-json.xml

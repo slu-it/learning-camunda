@@ -1,0 +1,15 @@
+build:
+  maxIssues: 0
+
+config:
+  validation: true
+  warningsAsErrors: true
+
+console-reports:
+  active: true
+
+## rule configuration ##
+
+formatting:
+  Filename:
+    active: false # disabled in favor of 'naming' rule 'MatchingDeclarationName'
