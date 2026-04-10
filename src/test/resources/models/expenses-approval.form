@@ -1,0 +1,47 @@
+{
+  "components": [
+    {
+      "label": "Decision",
+      "values": [
+        {
+          "label": "expenses are correct and approved",
+          "value": "true"
+        },
+        {
+          "label": "expenses are not approved",
+          "value": "false"
+        }
+      ],
+      "type": "radio",
+      "layout": {
+        "row": "Row_1czte32",
+        "columns": null
+      },
+      "id": "Field_19fv6ja",
+      "key": "approvalDecision",
+      "validate": {
+        "required": true
+      },
+      "defaultValue": "false"
+    },
+    {
+      "label": "Submit",
+      "action": "submit",
+      "type": "button",
+      "layout": {
+        "row": "Row_0goq67m",
+        "columns": null
+      },
+      "id": "Field_0u1lr9f"
+    }
+  ],
+  "type": "default",
+  "id": "form_expenses_approval",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.8.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.44.0"
+  },
+  "schemaVersion": 19
+}
