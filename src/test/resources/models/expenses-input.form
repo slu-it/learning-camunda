@@ -1,0 +1,147 @@
+{
+  "components": [
+    {
+      "label": "Employee ID",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_0sh9ol8",
+        "columns": null
+      },
+      "id": "Field_1ha5jkr",
+      "key": "inputEmployeeId",
+      "defaultValue": "EID-4711",
+      "disabled": false,
+      "validate": {
+        "required": true
+      },
+      "readonly": true
+    },
+    {
+      "subtype": "date",
+      "dateLabel": "Date",
+      "type": "datetime",
+      "layout": {
+        "row": "Row_0x5z8td",
+        "columns": null
+      },
+      "id": "Field_0taam8c",
+      "key": "inputDate",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "label": "Title",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_0ecdrn7",
+        "columns": null
+      },
+      "id": "Field_109ey3r",
+      "key": "inputTitle",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "label": "Amount",
+      "type": "number",
+      "layout": {
+        "row": "Row_1iwiv9k",
+        "columns": null
+      },
+      "id": "Field_0lbwk41",
+      "key": "inputAmount",
+      "validate": {
+        "min": "0",
+        "max": "10000",
+        "required": true
+      }
+    },
+    {
+      "label": "Currency",
+      "values": [
+        {
+          "label": "Euro",
+          "value": "EUR"
+        },
+        {
+          "label": "Swedish Krona",
+          "value": "SEK"
+        },
+        {
+          "label": "Dollar (SU",
+          "value": "value3"
+        }
+      ],
+      "type": "select",
+      "layout": {
+        "row": "Row_1iwiv9k",
+        "columns": null
+      },
+      "id": "Field_0jzlx15",
+      "key": "inputCurrency",
+      "defaultValue": "EUR",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "label": "VAT",
+      "values": [
+        {
+          "label": "19%",
+          "value": "DEFAULT_19"
+        },
+        {
+          "label": "7%",
+          "value": "REDUCED_7"
+        },
+        {
+          "label": "0%",
+          "value": "NONE"
+        }
+      ],
+      "type": "select",
+      "layout": {
+        "row": "Row_1iwiv9k",
+        "columns": null
+      },
+      "id": "Field_0yo1hq9",
+      "key": "inputVat",
+      "defaultValue": "DEFAULT_19",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "label": "Description",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_0scy049",
+        "columns": null
+      },
+      "id": "Field_0qy503d",
+      "key": "inputDescription"
+    },
+    {
+      "label": "Submit",
+      "action": "submit",
+      "type": "button",
+      "layout": {
+        "row": "Row_1x7l8fk",
+        "columns": null
+      },
+      "id": "Field_1npd988"
+    }
+  ],
+  "type": "default",
+  "id": "form_expenses_input",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.8.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.44.0"
+  },
+  "schemaVersion": 19
+}

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:modeler="http://camunda.org/schema/modeler/1.0" xmlns:biodi="http://bpmn.io/schema/dmn/biodi/2.0" id="definitions_expenses_approvalNeeded" name="Expenses - Approval Needed?" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="5.44.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.8.0">
+  <decision id="decision_expenses_approvalNeeded" name="Approval Needed?">
+    <decisionTable id="DecisionTable_0cnzvo7" hitPolicy="FIRST">
+      <input id="Input_1" label="Amount">
+        <inputExpression id="InputExpression_1" typeRef="number">
+          <text>inputAmount</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_099em2z" label="Currency">
+        <inputExpression id="LiteralExpression_16qnmc7" typeRef="string">
+          <text>inputCurrency</text>
+        </inputExpression>
+      </input>
+      <output id="Output_1" label="Approval Needed" name="approvalNeeded" typeRef="boolean" biodi:width="192" />
+      <rule id="DecisionRule_1ln8u4p">
+        <inputEntry id="UnaryTests_0axbchv">
+          <text>&lt;= 25</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0h1ntba">
+          <text>"EUR"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0sm9m3d">
+          <text>false</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1pzviqf">
+        <inputEntry id="UnaryTests_0ijcqc7">
+          <text>&lt;= 275</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1pwocni">
+          <text>"SEK"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1rc90uk">
+          <text>false</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0z6qhvu">
+        <inputEntry id="UnaryTests_1axo17g">
+          <text>&lt;= 30</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0rmfbrl">
+          <text>"USD"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0wiyy7h">
+          <text>false</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1nx9qzy">
+        <inputEntry id="UnaryTests_00qoc5v">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_03lvdop">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1n3b43q">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram>
+      <dmndi:DMNShape id="Decision_1fjjhep_di" dmnElementRef="decision_expenses_approvalNeeded">
+        <dc:Bounds height="80" width="180" x="160" y="100" />
+      </dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>
