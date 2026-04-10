@@ -5,6 +5,7 @@ import io.camunda.client.api.response.ProcessInstanceEvent
 import io.camunda.client.api.search.response.UserTask
 import io.camunda.process.test.api.CamundaAssert
 import io.camunda.process.test.api.CamundaSpringProcessTest
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -88,6 +89,75 @@ class ApplicationTests(
                 waitForCompletion(instance)
             }
         }
+
+        @Nested
+        inner class ExpensesProcess {
+
+            @BeforeEach
+            fun setupProcess() {
+                with(camunda) {
+                    addResources(
+                        "models/expenses.bpmn",
+                        "models/expenses-approval-needed.dmn",
+                        "models/expenses-input.form",
+                        "models/expenses-approval.form",
+                    )
+                }
+            }
+
+            @Test
+            fun `expenses process completes without approval when amount is less than 25 EUR`() {
+                with(camunda) {
+                    val instance = createInstance("process_expenses")
+
+                    waitForUserTaskAndSubmit(
+                        instance = instance,
+                        elementId = "userTask_submitForm",
+                        variables = mapOf(
+                            "inputEmployeeId" to "EID-4711",
+                            "inputDate" to "2026-04-10",
+                            "inputTitle" to "Coffee",
+                            "inputAmount" to 15,
+                            "inputCurrency" to "EUR",
+                            "inputVat" to "DEFAULT_19",
+                        )
+                    )
+
+                    waitForCompletion(instance)
+                    assertHasNonActivatedElements(instance, "userTask_approval")
+                    assertHasCompletedElements(instance, "endEvent_processed")
+                }
+            }
+
+            @Test
+            fun `expenses process routes to approval task when amount is more than 25 EUR`() {
+                with(camunda) {
+                    val instance = createInstance("process_expenses")
+
+                    waitForUserTaskAndSubmit(
+                        instance = instance,
+                        elementId = "userTask_submitForm",
+                        variables = mapOf(
+                            "inputEmployeeId" to "EID-4711",
+                            "inputDate" to "2026-04-10",
+                            "inputTitle" to "Team Dinner",
+                            "inputAmount" to 100,
+                            "inputCurrency" to "EUR",
+                            "inputVat" to "DEFAULT_19",
+                        )
+                    )
+
+                    waitForUserTaskAndSubmit(
+                        instance = instance,
+                        elementId = "userTask_approval",
+                        variables = mapOf("approvalDecision" to "true"),
+                    )
+
+                    waitForCompletion(instance)
+                    assertHasCompletedElements(instance, "endEvent_processed")
+                }
+            }
+        }
     }
 }
 
@@ -141,5 +211,13 @@ class CamundaHelper(
 
     fun waitForCompletion(instance: ProcessInstanceEvent) {
         CamundaAssert.assertThat(instance).isCompleted()
+    }
+
+    fun assertHasCompletedElements(instance: ProcessInstanceEvent, vararg elementIds: String) {
+        CamundaAssert.assertThat(instance).hasCompletedElements(*elementIds)
+    }
+
+    fun assertHasNonActivatedElements(instance: ProcessInstanceEvent, vararg elementIds: String) {
+        CamundaAssert.assertThat(instance).hasNotActivatedElements(*elementIds)
     }
 }
