@@ -37,12 +37,14 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-webmvc")
 
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("io.camunda:camunda-spring-boot-starter")
+    implementation("io.camunda:camunda-spring-boot-4-starter")
+    implementation("io.camunda.connector:spring-boot-starter-camunda-connectors:8.9.0")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.zalando:logbook-logstash")
     implementation("org.zalando:logbook-spring-boot-starter")
 
+    implementation("tools.jackson.module:jackson-module-kotlin")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin") // for Camunda Connectors
 
     testImplementation("org.springframework.boot:spring-boot-starter-actuator-test")
     testImplementation("org.springframework.boot:spring-boot-starter-security-test")

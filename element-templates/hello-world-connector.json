@@ -1,0 +1,32 @@
+{
+  "$schema": "https://unpkg.com/@camunda/zeebe-element-templates-json-schema/resources/schema.json",
+  "id": "learning.hello-world-connector",
+  "name": "Hello World Connector",
+  "description": "A simple connector that logs a message as INFO.",
+  "appliesTo": [
+    "bpmn:ServiceTask"
+  ],
+  "properties": [
+    {
+      "type": "Hidden",
+      "value": "learning::hello-world-connector",
+      "binding": {
+        "type": "zeebe:taskDefinition",
+        "property": "type"
+      }
+    },
+    {
+      "label": "Message",
+      "description": "The message to log.",
+      "type": "String",
+      "optional": false,
+      "binding": {
+        "type": "zeebe:input",
+        "name": "inputMessage"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    }
+  ]
+}
