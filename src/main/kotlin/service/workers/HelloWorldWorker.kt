@@ -13,6 +13,5 @@ class HelloWorldWorker {
     @JobWorker(type = "learning::hello-world")
     fun handleHelloWorld(job: ActivatedJob) {
         log.info("Hello ${job.getVariable("inputName") ?: "World"}!")
-        return
     }
 }

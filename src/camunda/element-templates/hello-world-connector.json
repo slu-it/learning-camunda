@@ -16,13 +16,21 @@
       }
     },
     {
+      "type": "Hidden",
+      "value": "1",
+      "binding": {
+        "type": "zeebe:taskDefinition",
+        "property": "retries"
+      }
+    },
+    {
       "label": "Message",
       "description": "The message to log.",
       "type": "String",
       "optional": false,
       "binding": {
         "type": "zeebe:input",
-        "name": "inputMessage"
+        "name": "message"
       },
       "constraints": {
         "notEmpty": true

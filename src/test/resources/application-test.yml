@@ -13,3 +13,7 @@ management:
 
 server:
   shutdown: immediate
+
+testing:
+  errors:
+    enabled: false

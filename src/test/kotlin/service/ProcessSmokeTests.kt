@@ -123,7 +123,7 @@ class ProcessSmokeTests(
             if (resources.isEmpty()) return
 
             client.newDeployResourceCommand()
-                .let { resources.map { resource -> it.addResourceFile(resource) }.last() }
+                .let { resources.map { resource -> it.addResourceFile("src/camunda/$resource") }.last() }
                 .send()
                 .join()
         }

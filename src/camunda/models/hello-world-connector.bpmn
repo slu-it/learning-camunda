@@ -6,9 +6,9 @@
     </bpmn:startEvent>
     <bpmn:serviceTask id="activity_hello-world-connector" name="Hello World!" zeebe:modelerTemplate="learning.hello-world-connector">
       <bpmn:extensionElements>
-        <zeebe:taskDefinition type="learning::hello-world-connector" />
+        <zeebe:taskDefinition type="learning::hello-world-connector" retries="1" />
         <zeebe:ioMapping>
-          <zeebe:input source="Hello World!" target="inputMessage" />
+          <zeebe:input source="Hello World!" target="message" />
         </zeebe:ioMapping>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1</bpmn:incoming>

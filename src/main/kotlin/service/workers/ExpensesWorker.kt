@@ -21,7 +21,6 @@ class ExpensesWorker {
         @Variable("currency") currency: Currency,
     ) {
         log.info("Processed $amount $currency expenses for $employeeId -- ${job.processInstanceKey}")
-        return
     }
 
     @JobWorker(type = "expenses::informEmployee")
@@ -31,6 +30,5 @@ class ExpensesWorker {
         @Variable("decision") decision: String,
     ) {
         log.info("Informed $employeeId about the decision '$decision' -- ${job.processInstanceKey}")
-        return
     }
 }
