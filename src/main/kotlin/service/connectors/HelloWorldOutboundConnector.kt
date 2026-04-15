@@ -11,18 +11,18 @@ import kotlin.random.Random
 
 @Component
 @OutboundConnector(
-    name = "Hello World",
-    type = "learning::hello-world-connector",
+    name = "Hello World Outbound Connector",
+    type = "learning::hello-world-outbound-connector",
     inputVariables = ["message"]
 )
-class HelloWorldConnector(
-    @Value($$"${testing.errors.enabled:true}") private val errorsEnabled: Boolean,
+class HelloWorldOutboundConnector(
+    @Value($$"${testing.errors.enabled:false}") private val errorsEnabled: Boolean,
 ) : OutboundConnectorFunction {
 
     private val log = getLogger(javaClass)
 
     override fun execute(context: OutboundConnectorContext): Any? {
-        val input = context.bindVariables(HelloWorldConnectorInput::class.java)
+        val input = context.bindVariables(HelloWorldDto::class.java)
         maybeThrowAnError()
         log.info("Hello World Connector: ${input.message}")
         return null

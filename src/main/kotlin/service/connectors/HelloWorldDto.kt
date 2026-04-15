@@ -1,5 +1,5 @@
 package service.connectors
 
-data class HelloWorldConnectorInput(
+data class HelloWorldDto(
     val message: String,
 )

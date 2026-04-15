@@ -1,15 +1,15 @@
 {
   "$schema": "https://unpkg.com/@camunda/zeebe-element-templates-json-schema/resources/schema.json",
-  "id": "learning.hello-world-connector",
-  "name": "Hello World Connector",
-  "description": "A simple connector that logs a message as INFO.",
+  "id": "learning.hello-world-outbound-connector",
+  "name": "Hello World Outbound Connector",
+  "description": "A simple outbound connector.",
   "appliesTo": [
     "bpmn:ServiceTask"
   ],
   "properties": [
     {
       "type": "Hidden",
-      "value": "learning::hello-world-connector",
+      "value": "learning::hello-world-outbound-connector",
       "binding": {
         "type": "zeebe:taskDefinition",
         "property": "type"

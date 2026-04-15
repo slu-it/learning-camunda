@@ -13,6 +13,7 @@ logging:
     service: info
     org.zalando.logbook: trace
 
+
 management:
   endpoint:
     info:

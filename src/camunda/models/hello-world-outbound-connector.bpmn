@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.45.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.9.0">
-  <bpmn:process id="process_hello-world-connector" name="Hello World Connector" isExecutable="true">
+  <bpmn:process id="process_hello-world-outbound-connector" name="Hello World Connector" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>Flow_1</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:serviceTask id="activity_hello-world-connector" name="Hello World!" zeebe:modelerTemplate="learning.hello-world-connector">
+    <bpmn:serviceTask id="activity_hello-world-connector" name="Hello World!" zeebe:modelerTemplate="learning.hello-world-outbound-connector">
       <bpmn:extensionElements>
-        <zeebe:taskDefinition type="learning::hello-world-connector" retries="1" />
+        <zeebe:taskDefinition type="learning::hello-world-outbound-connector" retries="1" />
         <zeebe:ioMapping>
-          <zeebe:input source="Hello World!" target="message" />
+          <zeebe:input source="Hello Outbound Connector!" target="message" />
         </zeebe:ioMapping>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1</bpmn:incoming>
@@ -21,7 +21,7 @@
     <bpmn:sequenceFlow id="Flow_2" sourceRef="activity_hello-world-connector" targetRef="EndEvent_1" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
-    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="process_hello-world-connector">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="process_hello-world-outbound-connector">
       <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="StartEvent_1">
         <dc:Bounds x="152" y="102" width="36" height="36" />
       </bpmndi:BPMNShape>

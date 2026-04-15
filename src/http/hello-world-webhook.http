@@ -1,0 +1,7 @@
+POST http://localhost:8081/api/hello-world
+Content-Type: application/json
+Authorization: Basic user resu
+
+{
+    "message": "Hello Webhook!"
+}

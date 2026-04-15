@@ -38,9 +38,9 @@ class ProcessSmokeTests(
     @Test
     fun `hello world connector process can be completed`() {
         with(camunda) {
-            addResources("models/hello-world-connector.bpmn")
+            addResources("models/hello-world-outbound-connector.bpmn")
 
-            val instance = createInstance("process_hello-world-connector")
+            val instance = createInstance("process_hello-world-outbound-connector")
 
             waitForCompletion(instance)
         }

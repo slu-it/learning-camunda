@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component
 @Component
 class TeachingKotlinToCamundaBeanPostProcessor : BeanPostProcessor {
     override fun postProcessAfterInitialization(bean: Any, beanName: String): Any {
-        if (bean is ObjectMapper && beanName == "outboundConnectorObjectMapper") {
+        if (bean is ObjectMapper) {
             return bean.registerModule(KotlinModule.Builder().build())
         }
         return bean
