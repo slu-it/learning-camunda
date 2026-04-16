@@ -4,6 +4,7 @@ import io.camunda.connector.api.annotation.OutboundConnector
 import io.camunda.connector.api.error.ConnectorException
 import io.camunda.connector.api.outbound.OutboundConnectorContext
 import io.camunda.connector.api.outbound.OutboundConnectorFunction
+import io.camunda.connector.generator.java.annotation.ElementTemplate
 import org.slf4j.LoggerFactory.getLogger
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
@@ -14,6 +15,12 @@ import kotlin.random.Random
     name = "Hello World Outbound Connector",
     type = "learning::hello-world-outbound-connector",
     inputVariables = ["message"]
+)
+@ElementTemplate(
+    id = "learning.hello-world-outbound-connector",
+    name = "Hello World Outbound Connector",
+    description = "A simple outbound connector.",
+    inputDataClass = HelloWorldDto::class,
 )
 class HelloWorldOutboundConnector(
     @Value($$"${testing.errors.enabled:false}") private val errorsEnabled: Boolean,
