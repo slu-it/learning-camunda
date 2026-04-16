@@ -27,6 +27,8 @@ dependencyManagement {
     }
     dependencies {
         dependency("com.ninja-squad:springmockk:5.0.1")
+        dependency("io.camunda.connector:spring-boot-starter-camunda-connectors:8.9.0")
+        dependency("io.camunda.connector:element-template-generator-annotations:8.9.0")
         dependency("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.8")
         dependency("io.mockk:mockk-jvm:1.14.9")
     }
@@ -39,7 +41,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-webmvc")
 
     implementation("io.camunda:camunda-spring-boot-4-starter")
-    implementation("io.camunda.connector:spring-boot-starter-camunda-connectors:8.9.0")
+    implementation("io.camunda.connector:element-template-generator-annotations")
+    implementation("io.camunda.connector:spring-boot-starter-camunda-connectors")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.zalando:logbook-logstash")
     implementation("org.zalando:logbook-spring-boot-starter")
