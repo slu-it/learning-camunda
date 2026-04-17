@@ -27,7 +27,7 @@ class ApplicationTests(
         @LocalManagementPort private val port: Int
     ) {
 
-        val publicEndpoints = setOf("/actuator/info", "/actuator/health")
+        val publicEndpoints = setOf("/actuator/info", "/actuator/health/liveness")
         val privateEndpoints = setOf("/actuator/metrics")
 
         @TestFactory
