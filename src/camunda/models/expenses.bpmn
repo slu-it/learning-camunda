@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1n4r9vb" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.44.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.8.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" xmlns:color="http://www.omg.org/spec/BPMN/non-normative/color/1.0" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1n4r9vb" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.45.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.8.0">
   <bpmn:collaboration id="Collaboration_06qrc6z">
     <bpmn:participant id="Participant_1hg4i35" processRef="process_expenses" />
   </bpmn:collaboration>
@@ -18,12 +18,17 @@
       <bpmn:lane id="lane_hr" name="HR">
         <bpmn:flowNodeRef>serviceTask_processExpenses</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>endEvent_processed</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>event_error101</bpmn:flowNodeRef>
       </bpmn:lane>
       <bpmn:lane id="Lane_0bwu2m2" name="Supervisor">
         <bpmn:flowNodeRef>userTask_approval</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>gateway_approvalDecision</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>endEvent_notApproved</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>serviceTask_informEmployee</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="lane_it" name="IT">
+        <bpmn:flowNodeRef>serviceTask_informIt</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>endEvent_failed</bpmn:flowNodeRef>
       </bpmn:lane>
     </bpmn:laneSet>
     <bpmn:startEvent id="startEvent" name="Start">
@@ -131,22 +136,46 @@
       <bpmn:incoming>Flow_0lwh7sa</bpmn:incoming>
       <bpmn:outgoing>Flow_16mkzg2</bpmn:outgoing>
     </bpmn:sendTask>
+    <bpmn:boundaryEvent id="event_error101" attachedToRef="serviceTask_processExpenses">
+      <bpmn:outgoing>Flow_07514h6</bpmn:outgoing>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_1agwzdj" errorRef="Error_1n6i63a" />
+    </bpmn:boundaryEvent>
+    <bpmn:sendTask id="serviceTask_informIt" name="Inform IT">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="learning::hello-world" retries="1" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=&#34;IT&#34;" target="inputName" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_07514h6</bpmn:incoming>
+      <bpmn:outgoing>Flow_10qfj8y</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:sequenceFlow id="Flow_07514h6" sourceRef="event_error101" targetRef="serviceTask_informIt" />
+    <bpmn:endEvent id="endEvent_failed" name="Failed">
+      <bpmn:incoming>Flow_10qfj8y</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_10qfj8y" sourceRef="serviceTask_informIt" targetRef="endEvent_failed" />
   </bpmn:process>
+  <bpmn:error id="Error_1n6i63a" name="ERROR_101" errorCode="E101" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_06qrc6z">
       <bpmndi:BPMNShape id="Participant_1hg4i35_di" bpmnElement="Participant_1hg4i35" isHorizontal="true">
-        <dc:Bounds x="160" y="80" width="1090" height="360" />
+        <dc:Bounds x="160" y="80" width="1090" height="498" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_0bwu2m2_di" bpmnElement="Lane_0bwu2m2" isHorizontal="true">
+        <dc:Bounds x="190" y="80" width="1060" height="120" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_0o7rqbh_di" bpmnElement="lane_hr" isHorizontal="true">
+        <dc:Bounds x="190" y="320" width="1060" height="138" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Lane_1qjxs5p_di" bpmnElement="lane_employee" isHorizontal="true">
         <dc:Bounds x="190" y="200" width="1060" height="120" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Lane_0o7rqbh_di" bpmnElement="lane_hr" isHorizontal="true">
-        <dc:Bounds x="190" y="320" width="1060" height="120" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Lane_0bwu2m2_di" bpmnElement="Lane_0bwu2m2" isHorizontal="true">
-        <dc:Bounds x="190" y="80" width="1060" height="120" />
+      <bpmndi:BPMNShape id="Lane_0ayakbd_di" bpmnElement="lane_it" isHorizontal="true" bioc:stroke="#6b3c00" bioc:fill="#ffe0b2" color:background-color="#ffe0b2" color:border-color="#6b3c00">
+        <dc:Bounds x="190" y="458" width="1060" height="120" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="startEvent">
@@ -197,6 +226,19 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0tjgyvu_di" bpmnElement="serviceTask_informEmployee">
         <dc:Bounds x="940" y="100" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0ieiukh_di" bpmnElement="serviceTask_informIt" bioc:stroke="#6b3c00" bioc:fill="#ffe0b2" color:background-color="#ffe0b2" color:border-color="#6b3c00">
+        <dc:Bounds x="940" y="480" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1xhnkox" bpmnElement="endEvent_failed" bioc:stroke="#6b3c00" bioc:fill="#ffe0b2" color:background-color="#ffe0b2" color:border-color="#6b3c00">
+        <dc:Bounds x="1142" y="502" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1145" y="545" width="30" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_110h7gr_di" bpmnElement="event_error101" bioc:stroke="#6b3c00" bioc:fill="#ffe0b2" color:background-color="#ffe0b2" color:border-color="#6b3c00">
+        <dc:Bounds x="1002" y="402" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_15ugdlk_di" bpmnElement="Flow_15ugdlk">
         <di:waypoint x="278" y="260" />
@@ -254,6 +296,16 @@
       <bpmndi:BPMNEdge id="Flow_0x4z7vy_di" bpmnElement="Flow_0x4z7vy">
         <di:waypoint x="1040" y="380" />
         <di:waypoint x="1142" y="380" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_07514h6_di" bpmnElement="Flow_07514h6">
+        <di:waypoint x="1020" y="438" />
+        <di:waypoint x="1020" y="450" />
+        <di:waypoint x="990" y="450" />
+        <di:waypoint x="990" y="480" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_10qfj8y_di" bpmnElement="Flow_10qfj8y">
+        <di:waypoint x="1040" y="520" />
+        <di:waypoint x="1142" y="520" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
