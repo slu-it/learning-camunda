@@ -35,58 +35,38 @@ import org.springframework.stereotype.Component
 )
 @Scope(SCOPE_PROTOTYPE)
 class HelloWorldInboundConnector(
-    private val publisher: HelloWorldPublisher,
-) : InboundConnectorExecutable<InboundConnectorContext>, HelloWorldWebhookSubscriber {
+    private val eventBridge: HelloWorldInboundConnectorEventBridge,
+) : InboundConnectorExecutable<InboundConnectorContext> {
 
     private val log = getLogger(javaClass)
-    private lateinit var context: InboundConnectorContext
+    private var context: InboundConnectorContext? = null
 
     override fun activate(context: InboundConnectorContext) {
         this.context = context
-        publisher.subscribe(this)
+        eventBridge.add(this)
         log.info("Hello World Inbound Connector activated")
     }
 
     override fun deactivate() {
-        publisher.unsubscribe(this)
+        this.context = null
+        eventBridge.remove(this)
         log.info("Hello World Inbound Connector deactivated")
     }
 
-    override fun handleWebhook(payload: HelloWorldDto) {
-        log.info("Received webhook message: ${payload.message}")
+    fun handle(event: HelloWorldDto) {
+        log.info("Received event with message: ${event.message}")
+        val ctx = context ?: error("context is null")
 
         val request = CorrelationRequest.builder()
-            .variables(mapOf("message" to payload.message))
+            .variables(mapOf("message" to event.message))
             .build()
 
-        when (val result = context.correlate(request)) {
+        when (val result = ctx.correlate(request)) {
             is Success -> log.info("Correlation succeeded")
             is Failure -> when (result.handlingStrategy()) {
                 is ForwardErrorToUpstream -> error("Correlation failed!")
                 is Ignore -> log.info("Correlation failed but strategy is Ignore, skipping")
             }
         }
-    }
-}
-
-interface HelloWorldWebhookSubscriber {
-    fun handleWebhook(payload: HelloWorldDto)
-}
-
-@Component
-class HelloWorldPublisher {
-
-    private val subscribers = mutableListOf<HelloWorldWebhookSubscriber>()
-
-    fun publish(event: HelloWorldDto) {
-        subscribers.forEach { subscriber -> subscriber.handleWebhook(event) }
-    }
-
-    fun subscribe(subscriber: HelloWorldWebhookSubscriber) {
-        subscribers.add(subscriber)
-    }
-
-    fun unsubscribe(subscriber: HelloWorldWebhookSubscriber) {
-        subscribers.remove(subscriber)
     }
 }

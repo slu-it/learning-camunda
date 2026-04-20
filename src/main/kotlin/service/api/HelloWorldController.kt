@@ -7,17 +7,17 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import service.connectors.HelloWorldDto
-import service.connectors.HelloWorldPublisher
+import service.connectors.HelloWorldInboundConnectorEventBridge
 
 @RestController
 @RequestMapping("/api/hello-world")
 class HelloWorldController(
-    private val publisher: HelloWorldPublisher
+    private val bridge: HelloWorldInboundConnectorEventBridge
 ) {
 
     @PostMapping
     @ResponseStatus(NO_CONTENT)
     fun receiveWebhook(@RequestBody payload: HelloWorldDto) {
-        publisher.publish(payload)
+        bridge.handle(payload)
     }
 }
