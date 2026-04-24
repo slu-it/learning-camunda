@@ -26,7 +26,7 @@ class ProcessSmokeTests(
     @Test
     fun `hello world example process can be completed`() {
         with(camunda) {
-            addResources("models/hello-world.bpmn", "models/hello-world.form")
+            addResources("models/experiments/hello-world.bpmn", "models/experiments/hello-world.form")
 
             val instance = createInstance("process_learning_hello-world")
 
@@ -38,7 +38,7 @@ class ProcessSmokeTests(
     @Test
     fun `hello world connector process can be completed`() {
         with(camunda) {
-            addResources("models/hello-world-outbound-connector.bpmn")
+            addResources("models/experiments/hello-world-outbound-connector.bpmn")
 
             val instance = createInstance("process_hello-world-outbound-connector")
 
@@ -53,10 +53,10 @@ class ProcessSmokeTests(
         fun setupProcess() {
             with(camunda) {
                 addResources(
-                    "models/expenses.bpmn",
-                    "models/expenses-approval-needed.dmn",
-                    "models/expenses-input.form",
-                    "models/expenses-approval.form",
+                    "models/experiments/expenses.bpmn",
+                    "models/experiments/expenses-approval-needed.dmn",
+                    "models/experiments/expenses-input.form",
+                    "models/experiments/expenses-approval.form",
                 )
             }
         }

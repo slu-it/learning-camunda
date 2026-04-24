@@ -1,4 +1,4 @@
-package service.connectors
+package service.experiments.connectors
 
 import io.camunda.connector.generator.java.annotation.TemplateProperty
 import io.camunda.connector.generator.java.annotation.TemplateProperty.PropertyConstraints

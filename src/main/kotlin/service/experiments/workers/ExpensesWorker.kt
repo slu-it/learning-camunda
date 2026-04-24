@@ -1,4 +1,4 @@
-package service.workers
+package service.experiments.workers
 
 import io.camunda.client.annotation.JobWorker
 import io.camunda.client.annotation.Variable

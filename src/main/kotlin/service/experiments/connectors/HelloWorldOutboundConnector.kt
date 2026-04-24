@@ -1,4 +1,4 @@
-package service.connectors
+package service.experiments.connectors
 
 import io.camunda.connector.api.annotation.OutboundConnector
 import io.camunda.connector.api.error.ConnectorException

@@ -1,4 +1,4 @@
-package service.connectors
+package service.experiments.connectors
 
 import io.camunda.connector.api.annotation.InboundConnector
 import io.camunda.connector.api.inbound.CorrelationFailureHandlingStrategy.ForwardErrorToUpstream

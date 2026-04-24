@@ -1,4 +1,4 @@
-package service.connectors
+package service.experiments.connectors
 
 import org.springframework.stereotype.Component
 import java.util.concurrent.ConcurrentHashMap
