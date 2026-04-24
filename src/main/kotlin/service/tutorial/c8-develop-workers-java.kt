@@ -63,14 +63,16 @@ class PackItemsWorker(
     private val log = LoggerFactory.getLogger(javaClass)
 
     @JobWorker(type = "tutorial::packItems:1")
-    fun handle(job: ActivatedJob) {
+    fun handle(job: ActivatedJob): Map<String, Any> {
         val orderId = job.getVariable("orderId")
 
         log.info("Order: {} Packing items", orderId)
-        service.packItems(job)
+        val packedItems = service.packItems(job)
         log.info("Order: {} Items packed successfully", orderId)
 
         log.info("List of variables from Zeebe: {}", job.variables)
+
+        return mapOf("packaged" to packedItems)
     }
 }
 
@@ -82,13 +84,15 @@ class ProcessPaymentWorker(
     private val log = LoggerFactory.getLogger(javaClass)
 
     @JobWorker(type = "tutorial::processPayment:1")
-    fun handle(job: ActivatedJob) {
+    fun handle(job: ActivatedJob): Map<String, Any> {
         val orderId = job.getVariable("orderId")
 
         log.info("Order: {} Processing payment", orderId)
-        service.processPayment(job)
+        val paymentConfirmation = service.processPayment(job)
         log.info("Order: {} Payment processed successfully", orderId)
 
         log.info("List of variables from Zeebe: {}", job.variables)
+
+        return mapOf("paymentConfirmation" to paymentConfirmation)
     }
 }
