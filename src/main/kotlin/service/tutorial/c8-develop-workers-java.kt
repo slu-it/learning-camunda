@@ -1,6 +1,7 @@
 package service.tutorial
 
 import io.camunda.client.annotation.JobWorker
+import io.camunda.client.annotation.Variable
 import io.camunda.client.api.response.ActivatedJob
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -43,7 +44,7 @@ class OrderWorker(
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    @JobWorker(type = "tutorial::trackOrderStatus:1", timeout = 10_000, fetchVariables = ["orderId"])
+    @JobWorker(type = "tutorial::trackOrderStatus:1", timeout = 10_000, maxJobsActive = 1, fetchVariables = ["orderId"])
     fun handle(job: ActivatedJob) {
         val orderId = job.getVariable("orderId")
 
@@ -51,6 +52,7 @@ class OrderWorker(
         service.trackOrderStatus(job)
         log.info("Order: {} Status tracked successfully", orderId)
 
+        // will contain only orderId, since fetchVariables was used
         log.info("List of variables from Zeebe: {}", job.variables)
     }
 }
@@ -63,13 +65,12 @@ class PackItemsWorker(
     private val log = LoggerFactory.getLogger(javaClass)
 
     @JobWorker(type = "tutorial::packItems:1")
-    fun handle(job: ActivatedJob): Map<String, Any> {
-        val orderId = job.getVariable("orderId")
-
+    fun handle(job: ActivatedJob, @Variable("orderId") orderId: String): Map<String, Any> {
         log.info("Order: {} Packing items", orderId)
         val packedItems = service.packItems(job)
         log.info("Order: {} Items packed successfully", orderId)
 
+        // will contain only orderId, since @variable was used
         log.info("List of variables from Zeebe: {}", job.variables)
 
         return mapOf("packaged" to packedItems)
@@ -91,6 +92,7 @@ class ProcessPaymentWorker(
         val paymentConfirmation = service.processPayment(job)
         log.info("Order: {} Payment processed successfully", orderId)
 
+        // will contain all, since @Variable was not used
         log.info("List of variables from Zeebe: {}", job.variables)
 
         return mapOf("paymentConfirmation" to paymentConfirmation)
